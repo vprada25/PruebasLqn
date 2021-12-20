@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<metachar set="UTF-8">
+	<title>Pokemon.js</title>
+</head>
+<body>
+	<script >
+		const pokemon = [
+  "audino",
+  "bagon",
+  "baltoy",
+  "banette",
+  "bidoof",
+  "braviary",
+  "bronzor",
+  "carracosta",
+  "charmeleon",
+  "cresselia",
+  "croagunk",
+  "darmanitan",
+  "deino",
+  "emboar",
+  "emolga",
+  "exeggcute",
+  "gabite",
+  "girafarig",
+  "gulpin",
+  "haxorus",
+  "heatmor",
+  "heatran",
+  "ivysaur",
+  "jellicent",
+  "jumpluff",
+  "kangaskhan",
+  "kricketune",
+  "landorus",
+  "ledyba",
+  "loudred",
+  "lumineon",
+  "lunatone",
+  "machamp",
+  "magnezone",
+  "mamoswine",
+  "nosepass",
+  "petilil",
+  "pidgeotto",
+  "pikachu",
+  "pinsir",
+  "poliwrath",
+  "poochyena",
+  "porygon2",
+  "porygonz",
+  "registeel",
+  "relicanth",
+  "remoraid",
+  "rufflet",
+  "sableye",
+  "scolipede",
+  "scrafty",
+  "seaking",
+  "sealeo",
+  "silcoon",
+  "simisear",
+  "snivy",
+  "snorlax",
+  "spoink",
+  "starly",
+  "tirtouga",
+  "trapinch",
+  "treecko",
+  "tyrogue",
+  "vigoroth",
+  "vulpix",
+  "wailord",
+  "wartortle",
+  "whismur",
+  "wingull",
+  "yamask",
+];
+
+
+// Encuentra la letra en la que termina la palabra
+
+const letraFinal = (word) => word[word.length - 1];
+
+// Elimina los elementos usados ​​de los elementos restantes
+
+const EliminarUsados = (words, used) => words.filter((e) => !used.includes(e));
+
+//Construye un mapa de letras a palabras que comienzan con esa letra
+const crearBusqueda = (words) => {
+  const lookup = new Map();
+  words.forEach((e) => {
+    const start = e[0];
+    lookup.set(start, [...(lookup.get(start) || []), e]);
+  });
+
+  return lookup;
+};
+
+//funcion Principal
+
+const Combinaciones = (names) => {
+  const lookup = crearBusqueda(names);
+
+  let numMax = 0;
+  let maxCombinaciones = [];
+
+  const parseResult = (arr) => {
+    if (typeof arr[0] === "object") {
+      arr.forEach((el) => parseResult(el));
+    } else {
+      if (arr.length > numMax) {
+        numMax = arr.length;
+        maxCombinaciones = [arr];
+      }
+
+      if (arr.length === numMax) {
+        maxCombinaciones.push(arr);
+      }
+    }
+  };
+
+  const searchWords = (word, res) => {
+    const cs = EliminarUsados(lookup.get(letraFinal(word)) || [], res);
+    return cs.length ? cs.map((e) => searchWords(e, [...res, e])) : res;
+		console.log(cs.length ? cs.map((e) => searchWords(e, [...res, e])) : res);
+  };
+
+  names.forEach((word) => {
+    const res = searchWords(word, [word]);
+    parseResult(res);
+  });
+
+  
+  console.log('Secuencia Maxima:', numMax);
+  console.log('Secuencias Totales:', maxCombinaciones.length);
+  console.log('Secuencia Final:', maxCombinaciones[0]);
+};
+
+Combinaciones(pokemon);
+
+	</script>
+</body>
+</html>
